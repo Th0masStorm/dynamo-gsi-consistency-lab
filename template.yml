@@ -1,0 +1,42 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: dynamo stuff
+
+
+Resources:
+  dynamodbTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        -
+          AttributeName: PartitionKey
+          AttributeType: S
+        -
+          AttributeName: SortKey
+          AttributeType: S
+        -
+          AttributeName: GSIKey
+          AttributeType: S
+
+      GlobalSecondaryIndexes:
+        -
+          IndexName: GSI
+          KeySchema:
+            -
+              AttributeName: GSIKey
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      KeySchema:
+        -
+          AttributeName: PartitionKey
+          KeyType: HASH
+        -
+          AttributeName: SortKey
+          KeyType: RANGE
+
+
+Outputs:
+  TableName:
+    Value: !Ref dynamodbTable
